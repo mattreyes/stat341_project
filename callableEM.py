@@ -3,11 +3,11 @@ import sys
 import numpy as np
 from matplotlib import pyplot as plt
 
-def em(data,num_iter=10000):
+def em(data,truSd,num_iter=10000):
     mu1 = 0
     mu2 = 0
-    sd1 = 1
-    sd2 = 1
+    sd1 = truSd#1
+    sd2 = truSd#1
     pi1 = 0.49
     pi2 = 1 - pi1
     n = len(data)
@@ -31,8 +31,8 @@ def em(data,num_iter=10000):
         mu1 = (1/n1)*np.sum(w*data)
         mu2 = (1/n2)*np.sum((1-w)*data)
 
-        sd1 = math.sqrt(np.sum(w*(data-mu1)*(data-mu1)) / n1   )
-        sd2 = math.sqrt((1/n2)*np.sum((1-w)*(data-mu2)*(data-mu2)))
+        #sd1 = math.sqrt(np.sum(w*(data-mu1)*(data-mu1)) / n1   )
+        #sd2 = math.sqrt((1/n2)*np.sum((1-w)*(data-mu2)*(data-mu2)))
         
     print(str(mu1))    
     print(str(pi1))
@@ -45,10 +45,10 @@ def em(data,num_iter=10000):
 
 # Get parameters from call:
 sed = int(sys.argv[1])
-mu1 = int(sys.argv[2])
-mu2 = int(sys.argv[3])
-sd1 = int(sys.argv[4])
-sd2 = int(sys.argv[5])
+mu1 = float(sys.argv[2])
+mu2 = float(sys.argv[3])
+sd1 = float(sys.argv[4])
+sd2 = float(sys.argv[5])
 pi = float(sys.argv[6])
 n1 = int(1000*pi) 
 n2 = 1000-n1
@@ -58,7 +58,7 @@ x1 = np.random.normal(mu1,sd1,n1)
 x2 = np.random.normal(mu2,sd2,n2)
 x = np.append(x1,x2)
 
-em(x)
+em(x,sd1)
 
 
 

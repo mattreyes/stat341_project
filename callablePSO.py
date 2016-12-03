@@ -54,7 +54,7 @@ class Particle:
             self.best_fitness = self.current_fitness
 
 			
-def pso(x,truPi,num_particles=50,num_iter=100):
+def pso(x,truSig,truPi,num_particles=50,num_iter=100):
 	N = num_particles
 	iterations = num_iter
 
@@ -78,8 +78,8 @@ def pso(x,truPi,num_particles=50,num_iter=100):
 		rand_pi = np.random.uniform(0,1)
 		rand_mean1 = np.random.uniform(data_min,data_max)
 		rand_mean2 = np.random.uniform(data_min,data_max)
-		sigma1 = 1
-		sigma2 = 1
+		sigma1 = truSig
+		sigma2 = truSig
 		rand_posn = np.array([rand_pi,rand_mean1,rand_mean2])
 		rand_velocity = np.array([np.random.uniform(0,1),
 								 np.random.uniform(0,1),
@@ -101,8 +101,8 @@ def pso(x,truPi,num_particles=50,num_iter=100):
 			mean2 = params[2]
 			sigma1 = 1
 			sigma2 = 1
-			p.calculate_fitness(x,pi,mean1,mean2,sigma1,sigma2)
-        gbest = max(particles,key=attrgetter('best_fitness'))    
+			p.calculate_fitness(x,pi,mean1,mean2,sigma1*sigma1,sigma2*sigma2)
+		gbest = max(particles,key=attrgetter('best_fitness'))
 	
 	# Output results:
 	if abs(truPi-gbest.pbest[0]) < abs(truPi-(1-gbest.pbest[0])):  
@@ -125,10 +125,10 @@ def pso(x,truPi,num_particles=50,num_iter=100):
 
 	
 sed = int(sys.argv[1])
-mu1 = int(sys.argv[2])
-mu2 = int(sys.argv[3])
-sd1 = 1#int(sys.argv[4])
-sd2 = 1#int(sys.argv[5])
+mu1 = float(sys.argv[2])
+mu2 = float(sys.argv[3])
+sd1 = float(sys.argv[4])
+sd2 = float(sys.argv[5])
 pi = float(sys.argv[6])
 n1 = int(1000*pi) 
 n2 = 1000-n1
@@ -138,7 +138,7 @@ x1 = np.random.normal(mu1,sd1,n1)
 x2 = np.random.normal(mu2,sd2,n2)
 x = np.append(x1,x2)
 
-pso(x,pi)
+pso(x,sd1,pi)
 
 
 
