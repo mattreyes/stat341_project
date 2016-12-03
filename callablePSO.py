@@ -26,8 +26,8 @@ class Particle:
         upper_bound=np.zeros(self.num_parameters),
         lower_bound=np.zeros(self.num_parameters)
         
-        cond1 = delta <= upper_bound
-        cond2 = delta >= lower_bound
+        cond1 = self.velocity + delta <= upper_bound
+        cond2 = self.velocity + delta >= lower_bound
         
         if (use_boundary and cond1.all() and cond2.all()) or use_boundary==False:
             self.velocity = self.velocity + delta
@@ -43,13 +43,13 @@ class Particle:
     def _gaussian_likelihood(self,x,pi,mean1,mean2,var1,var2):
         # x is a vector of data
         n = len(x)
-        p = 1
+        p = 0
         for i in range(0,n):
-            p = p * self._mix_dist(x[i],pi,mean1,mean2,var1,var2)
+            p = p + math.log(self._mix_dist(x[i],pi,mean1,mean2,var1,var2)) 
         return p
     def calculate_fitness(self,x,pi,mean1,mean2,var1,var2):
         self.current_fitness = self._gaussian_likelihood(x,pi,mean1,mean2,var1,var2)
-        if self.current_fitness > self.best_fitness:
+        if self.current_fitness > self.best_fitness or self.best_fitness == 0:
             self.pbest = self.position
             self.best_fitness = self.current_fitness
 
@@ -102,7 +102,7 @@ def pso(x,truPi,num_particles=50,num_iter=100):
 			sigma1 = 1
 			sigma2 = 1
 			p.calculate_fitness(x,pi,mean1,mean2,sigma1,sigma2)
-			gbest = max(particles,key=attrgetter('best_fitness'))    
+        gbest = max(particles,key=attrgetter('best_fitness'))    
 	
 	# Output results:
 	if abs(truPi-gbest.pbest[0]) < abs(truPi-(1-gbest.pbest[0])):  
