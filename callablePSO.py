@@ -102,7 +102,7 @@ def pso(x,truPi,num_particles=50,num_iter=100):
 			sigma1 = 1
 			sigma2 = 1
 			p.calculate_fitness(x,pi,mean1,mean2,sigma1,sigma2)
-        gbest = max(particles,key=attrgetter('best_fitness'))    
+		gbest = max(particles,key=attrgetter('best_fitness'))    
 	
 	# Output results:
 	if abs(truPi-gbest.pbest[0]) < abs(truPi-(1-gbest.pbest[0])):  
