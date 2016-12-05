@@ -88,7 +88,7 @@ def pso(x,truSig,truPi,num_particles=50,num_iter=100):
 		particles[p] = Particle(rand_posn,rand_velocity)
 		particles[p].calculate_fitness(x,rand_pi,rand_mean1,rand_mean2,sigma1,sigma2)
 
-	gbest = max(particles,key=attrgetter('best_fitness'))    
+		gbest = max(particles,key=attrgetter('best_fitness'))    
 
 	# repeat until convergence
 	for i in range(iterations):
